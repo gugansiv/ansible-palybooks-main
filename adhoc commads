@@ -1,0 +1,71 @@
+# sudo vim /etc/ansible/hosts
+Add the following two hosts IP address..
+
+[webservers]
+192.168.87.156
+192.168.87.157
+
+Install Ansible 
+
+yum install python python-pip python-setuptools*
+curl -O https://bootstrap.pypa.io/get-pip.py
+python get-pip.py
+pip install boto
+pip install boto3
+
+Ansible Modules:
+-------------------------
+
+Ping Module:
+ansible testservers -m ping
+
+File module: Creating and deleting directory
+
+ansible testservers -m file -a "dest=/root/file state=directory"
+ansible testservers -m file -a "dest=/root/file mode=755 owner=root group=root state=directory"
+ansible testservers -m file -a "dest=/root/file state=absent"
+
+Copy Module:
+
+ansible testservers -m copy -a "src=/root/file/text.txt dest=/root/"
+
+Shell Module:
+
+ansible testservers -m shell -a "mkdir test"
+
+Yum Module:
+
+ansible testservers -m yum -a "name=wget state=present"
+ansible testservers -m yum -a "name=httpd state=present"
+
+
+Service Module:
+
+ansible testservers -m service -a "name=httpd state=restarted"
+ansible testservers -m service -a "name=httpd state=started"
+ansible testservers -m service -a "name=httpd state=stopped"
+
+Restarting the servers:
+
+ansible testservers -a "/sbin/reboot"
+
+
+python --version
+pip --version
+# ansible -m ping webservers
+# ansible -m ping -all
+# ansible -m command -a "df -h" webservers
+# ansible -m command -a "free -mt" webservers
+# ansible -m shell -a "service httpd status" webservers > service_status.txt
+# ansible -m shell -a "init 0" webservers
+# ansible -m shell -a "/sbin/service ntpd status" devhosts -s -k
+#ansible db:webserver -m shell -a "uptime"
+#ansible db:webserver -m shell -a "free -m"
+
+
+$ ansible -m shell -a "/sbin/service httpd status" 192.168.1.32 -s
+192.168.1.32 | SUCCESS | rc=0 >>
+httpd (pid  32076) is running...
+
+# ansible-playbook -i inventoryfile playbook.yml -e file_state=touch --start-at-task='Task Name'
+# ansible-playbook -i inventoryfile playbook.yml -e file_state=absent --start-at-task='Task Name'
